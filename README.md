@@ -1,5 +1,7 @@
 # Average color
 
+[![Build Status](https://travis-ci.org/costmkv/average-color.svg?branch=master)](https://travis-ci.org/costmkv/average-color)
+
 ## Example
 
 ```javascript
