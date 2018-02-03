@@ -1,0 +1,8 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "func-names": ["error", "never"],
+    "no-param-reassign": 0,
+    "no-undef": 0
+  }
+}

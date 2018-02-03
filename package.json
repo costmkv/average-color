@@ -18,9 +18,15 @@
   },
   "homepage": "https://github.com/costmkv/average-color#readme",
   "dependencies": {
-    "expect.js": "^0.3.1",
-    "imagemagick": "^0.1.3",
-    "mocha": "^5.0.0",
-    "rgb-hex": "^2.1.0"
+    "eslint-config-airbnb": "16.1.0",
+    "expect.js": "0.3.1",
+    "imagemagick": "0.1.3",
+    "mocha": "5.0.0",
+    "rgb-hex": "2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "4.17.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-import": "2.8.0"
   }
 }

@@ -1,22 +1,22 @@
-var averageColor  = require('./');
-var expect  = require('expect.js');
+const averageColor = require('./');
+const expect = require('expect.js');
 
-var imgPath = './image.jpg';
+const imgPath = './image.jpg';
 
-describe('average-colour', function() {
-		it('should get hex', function(done) {
-				averageColor(imgPath, function(err, color) {
-						expect(color).to.be('5f5554');
+describe('average-colour', () => {
+  it('should get hex', (done) => {
+    averageColor(imgPath, (err, color) => {
+      expect(color).to.be('5f5554');
 
-						done();
-				});
-		});
+      done();
+    });
+  });
 
-		it ('should get rgb', function(done) {
-				averageColor(imgPath, 'rgb', function(err, color) {
-						expect(color).to.eql([95, 85, 84]);
+  it('should get rgb', (done) => {
+    averageColor(imgPath, 'rgb', (err, color) => {
+      expect(color).to.eql([95, 85, 84]);
 
-						done();
-				});
-		});
+      done();
+    });
+  });
 });
