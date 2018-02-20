@@ -3,7 +3,7 @@ const expect = require('expect.js');
 
 const imgPath = './image.jpg';
 
-describe('average-colour', () => {
+describe('average-color', () => {
   it('should get hex', (done) => {
     averageColor(imgPath, (err, color) => {
       expect(color).to.be('5f5554');

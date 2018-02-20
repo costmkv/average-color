@@ -5,7 +5,7 @@
 ## Example
 
 ```javascript
-var averageColor   = require('./');
+var averageColor = require('./');
 var imgPath = './image.jpg';
 
 averageColor(imgPath, function(err, color){
