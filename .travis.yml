@@ -1,8 +1,0 @@
-language: node_js
-before_install:
-  - sudo apt install graphicsmagick
-node_js:
-  - "8"
-  - "stable"
-notifications:
-  email: false
