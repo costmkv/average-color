@@ -1,30 +1,48 @@
-const im = require('imagemagick');
-const rgbToHex = require('rgb-hex');
+const { Steppy } = require('twostep');
+const gm = require('gm');
 
-module.exports = function (filePath, format, callback) {
-  if (!callback) {
-    callback = format;
-    format = undefined;
-  }
+const parseChannelColor = color => Number(color.match(/\((.+)\)/)[1]);
 
-  const imArgs = [filePath, '-scale', '1x1', '-format', '%[pixel:u]', 'info:-'];
-  format = format || 'hex';
+const getChannelColor = color => Math.floor(255 * parseChannelColor(color));
 
-  im.convert(imArgs, (err, srgb) => {
-    if (err) {
-      callback(err);
-    }
+module.exports = function (filePath, callback) {
+  Steppy(
+    function () {
+      gm(filePath).identify(this.slot());
+    },
+    function (err, report) {
+      const channels = report['Channel Statistics'];
+      const color = Buffer.alloc(3);
 
-    const rgb = srgb.substring(srgb.indexOf('(') + 1, srgb.indexOf(')'));
+      if (channels.Gray) {
+        const gray = getChannelColor(channels.Gray.Mean);
 
-    let color = null;
+        for (let index = 0; index < 3; index += 1) {
+          color.writeUInt8(gray, index);
+        }
+      } else if (channels.Red && channels.Green && channels.Blue) {
+        ['Red', 'Green', 'Blue'].forEach((channel, index) => {
+          color.writeUInt8(getChannelColor(channels[channel].Mean), index);
+        });
+      } else if (
+        channels.Cyan && channels.Magenta && channels.Yellow && channels.Black
+      ) {
+        const cmyk = {};
 
-    if (format === 'hex') {
-      color = rgbToHex(`rgb(${rgb.toString()})`);
-    } else if (format === 'rgb') {
-      color = rgb.split(',').map(value => Number(value));
-    }
+        ['Cyan', 'Magenta', 'Yellow', 'Black'].forEach((channel) => {
+          cmyk[channel] = parseChannelColor(channels[channel].Mean);
+        });
 
-    callback(null, color);
-  });
+        ['Cyan', 'Magenta', 'Yellow'].forEach((channel, index) => {
+          const calcColor = Math.floor(255 * (1 - cmyk[channel]) * (1 - cmyk.Black));
+          color.writeUInt8(calcColor, index);
+        });
+      } else {
+        throw new Error('Unsupported image color profile');
+      }
+
+      this.pass(color.toString('hex'));
+    },
+    callback,
+  );
 };
